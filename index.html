@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, Fee!</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #7c3aed, #a78bfa);
+      font-family: 'Georgia', serif;
+      color: #3b0764;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+    header {
+      background-color: #a78bfa;
+      padding: 50px 20px;
+    }
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+      color: white;
+    }
+    .section {
+      padding: 30px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .btn {
+      background-color: #7c3aed;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #5b21b6;
+    }
+    .hidden { display: none; }
+
+    /* Slideshow */
+    .slideshow {
+      position: relative;
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    .slideshow img {
+      width: 100%;
+      border-radius: 12px;
+      display: none;
+    }
+    .slideshow img.active {
+      display: block;
+    }
+
+    /* Guestbook */
+    #guestbook {
+      margin-top: 20px;
+    }
+    textarea {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-family: Georgia, serif;
+    }
+    .entry {
+      background: #faf5ff;
+      margin: 10px auto;
+      padding: 10px;
+      border-left: 5px solid #a78bfa;
+      max-width: 600px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🎶 Background Music -->
+  <audio id="bg-music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mp3">
+  </audio>
+  <button class="btn" onclick="toggleMusic()">🎵 Play / Pause Music</button>
+
+  <header>
+    <h1>Happy Birthday, Fee! 🎂</h1>
+    <p><strong>“Challenge Accepted.”</strong></p>
+  </header>
+
+  <!-- 📝 Poem -->
+  <section class="section">
+    <p>
+      Today we celebrate you — the poetic coder, the meme king, the kind-hearted challenger of life.<br>
+      Here’s your birthday page full of love and fun 💜
+    </p>
+    <button class="btn" onclick="showPoem()">Click for a Poem</button>
+    <p id="poem" class="hidden">
+      Roses are binary,<br>
+      Violets are code,<br>
+      You debug my heart<br>
+      And lighten my load 💾❤️
+    </p>
+  </section>
+
+  <!-- 🖼️ Slideshow -->
+  <section class="section slideshow">
+    <h2>📸 Moments Together</h2>
+    <img src="https://via.placeholder.com/600x400?text=Us+1" class="active" />
+    <img src="https://via.placeholder.com/600x400?text=Us+2" />
+    <img src="https://via.placeholder.com/600x400?text=Us+3" />
+  </section>
+
+  <!-- 📚 Flipbook Poem Viewer -->
+  <section class="section">
+    <h2>📖 Your Poetry Corner</h2>
+    <button class="btn" onclick="nextPoem()">Next Poem</button>
+    <p id="poetry">
+      "In code I trust,<br>
+      But poems are just,<br>
+      Another way I feel<br>
+      What logic can't reveal."
+    </p>
+  </section>
+
+  <!-- 🧠 Quiz -->
+  <section class="section">
+    <h2>🧠 Birthday Quiz</h2>
+    <div>
+      <p><strong>1. Fee encounters a bug. What does he say?</strong></p>
+      <button class="btn" onclick="checkAnswer(this, true)">“Challenge Accepted.”</button>
+      <button class="btn" onclick="checkAnswer(this, false)">“Nope, I’m out.”</button>
+    </div>
+    <div>
+      <p><strong>2. Fee sees a cat meme. What does he do?</strong></p>
+      <button class="btn" onclick="checkAnswer(this, true)">Save & send it</button>
+      <button class="btn" onclick="checkAnswer(this, false)">Ignore it</button>
+    </div>
+    <div>
+      <p><strong>3. What game did Fee and I play together?</strong></p>
+      <button class="btn" onclick="checkAnswer(this, true)">Hellblade: Senua's Sacrifice</button>
+      <button class="btn" onclick="checkAnswer(this, false)">The Witcher 3</button>
+    </div>
+    <div>
+      <p><strong>4. What is Fee's favorite genre of music?</strong></p>
+      <button class="btn" onclick="checkAnswer(this, true)">Country</button>
+      <button class="btn" onclick="checkAnswer(this, false)">Pop</button>
+    </div>
+  </section>
+
+  <!-- 🐱 Adopt a Cat -->
+  <section class="section">
+    <h2>😺 Serious Question</h2>
+    <button class="btn" onclick="adoptCat()">Adopt a cat with me?</button>
+    <div id="catMeme" class="hidden">
+      <p>Here's your future roommate 🐾</p>
+      <img src="https://i.imgur.com/dtNehhE.jpeg" width="300" />
+    </div>
+  </section>
+
+  <!-- 🎁 Guestbook -->
+  <section class="section">
+    <h2>💌 Leave Fee a Birthday Wish</h2>
+    <textarea id="wish" rows="3" placeholder="Write your message here..."></textarea><br>
+    <button class="btn" onclick="addWish()">Send</button>
+    <div id="guestbook"></div>
+  </section>
+
+  <footer class="section">
+    <p>Forever yours,<br>Your favorite human 💜</p>
+  </footer>
+
+  <script>
+    // Music toggle
+    function toggleMusic() {
+      const music = document.getElementById("bg-music");
+      if (music.paused) music.play();
+      else music.pause();
+    }
+
+    // Poem reveal
+    function showPoem() {
+      document.getElementById("poem").classList.remove("hidden");
+    }
+
+    // Quiz feedback
+    function checkAnswer(btn, isCorrect) {
+      btn.disabled = true;
+      btn.style.backgroundColor = isCorrect ? "#16a34a" : "#dc2626";
+      btn.innerText += isCorrect ? " ✅" : " ❌";
+    }
+
+    // Cat meme
+    function adoptCat() {
+      document.getElementById("catMeme").classList.remove("hidden");
+    }
+
+    // Slideshow
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".slideshow img");
+    setInterval(() => {
+      slides[currentSlide].classList.remove("active");
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add("active");
+    }, 4000);
+
+    // Flipbook poem viewer
+    const poems = [
+      `"In code I trust,<br>But poems are just,<br>Another way I feel<br>What logic can't reveal."`,
+      `"Lines of logic, lines of rhyme,<br>You write both, and make them shine."`,
+      `"Bug or sonnet, both you fix,<br>With wisdom, wit, and little tricks."`
+    ];
+    let currentPoem = 0;
+    function nextPoem() {
+      currentPoem = (currentPoem + 1) % poems.length;
+      document.getElementById("poetry").innerHTML = poems[currentPoem];
+    }
+
+    // Guestbook
+    function addWish() {
+      const wish = document.getElementById("wish").value.trim();
+      if (wish) {
+        const entry = document.createElement("div");
+        entry.className = "entry";
+        entry.innerText = wish;
+        document.getElementById("guestbook").appendChild(entry);
+        document.getElementById("wish").value = "";
+      }
+    }
+  </script>
+
+</body>
+</html>
